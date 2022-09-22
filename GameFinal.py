@@ -58,12 +58,18 @@ grenade_lanzada = False
 # Musica_Fondo = pygame.mixer.Sound('audio/Audio_Prueba.mpeg')
 # Musica_Fondo.play(-1)
 # Musica_Fondo.set_volume(0.05) 
-jump_fx = pygame.mixer.Sound('audio/jump.wav')
-jump_fx.set_volume(0.05)
-shot_fx = pygame.mixer.Sound('audio/shot.wav')
-shot_fx.set_volume(0.05)
-grenade_fx = pygame.mixer.Sound('audio/grenade.wav')
-grenade_fx.set_volume(0.05)
+pygame.mixer.music.load('audio/Audio_Juego.mpeg')
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1, 0.0, 5000)
+
+jump_sound = pygame.mixer.Sound('audio/jumppp11.ogg')
+jump_sound.set_volume(2)
+
+shot_sound = pygame.mixer.Sound('audio/shot.wav')
+shot_sound.set_volume(0.5)
+
+grenade_sound = pygame.mixer.Sound('audio/grenade.wav')
+grenade_sound.set_volume(0.5)
 
 #Bullets 
 bullet_d = pygame.image.load('img/icons/bullet_d.png')
@@ -359,36 +365,36 @@ class Player(pygame.sprite.Sprite):
         if self.shoot_enfriamiento == 0 and self.municion > 0:
             self.shoot_enfriamiento = 20 # Tiempo entre cada Disparo            
                                                   # ⬇️Evita la colision de la bala con el jugador mismo 
-            bullet = Bullet(self.rect.centerx + (0.8 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Bullet') #(player.rect.size[0]): me permite hacer el disparo de la bala
+            bullet = Bullet(self.rect.centerx + (1.3 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Bullet') #(player.rect.size[0]): me permite hacer el disparo de la bala
             bullet_group.add(bullet)
             self.municion -=1
-            shot_fx.play()
+            shot_sound.play()
             
     
     def shoot_a(self):      
         if self.shoot_a_enfriamiento == 0 and self.municion_a > 0:
             self.shoot_a_enfriamiento = 50 # Tiempo entre cada Disparo            
                                                   # ⬇️Evita la colision de la bala con el jugador mismo 
-            bullet = Bullet(self.rect.centerx + (0.8 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Escopeta') #(player.rect.size[0]): me permite hacer el disparo de la bala
+            bullet = Bullet(self.rect.centerx + (1 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Escopeta') #(player.rect.size[0]): me permite hacer el disparo de la bala
             bullet_group.add(bullet)
             self.municion_a -=1    
-            shot_fx.play()
+            shot_sound.play()
     def shoot_b(self):      
         if self.shoot_b_enfriamiento == 0 and self.municion_b > 0:
             self.shoot_b_enfriamiento = 80 # Tiempo entre cada Disparo            
                                                   # ⬇️Evita la colision de la bala con el jugador mismo 
-            bullet = Bullet(self.rect.centerx + (0.75 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Fusil') #(player.rect.size[0]): me permite hacer el disparo de la bala
+            bullet = Bullet(self.rect.centerx + (1 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Fusil') #(player.rect.size[0]): me permite hacer el disparo de la bala
             bullet_group.add(bullet)
             self.municion_b -=1 
-            shot_fx.play() 
+            shot_sound.play() 
     def shoot_c(self):      
         if self.shoot_c_enfriamiento == 0 and self.municion_c > 0:
             self.shoot_c_enfriamiento = 6 # Tiempo entre cada Disparo            
                                                   # ⬇️Evita la colision de la bala con el jugador mismo 
-            bullet = Bullet(self.rect.centerx + (0.9 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Ametralladora') #(player.rect.size[0]): me permite hacer el disparo de la bala
+            bullet = Bullet(self.rect.centerx + (2 * self.rect.size[0] * self.direction), self.rect.centery, self.direction, 'Ametralladora') #(player.rect.size[0]): me permite hacer el disparo de la bala
             bullet_group.add(bullet)
             self.municion_c -=1 
-            shot_fx.play()
+            shot_sound.play()
     
     #IA de Enemigos 
     def ai(self):
@@ -634,7 +640,7 @@ class Grenade(pygame.sprite.Sprite):
     def __init__(self, x, y, direction):
         pygame.sprite.Sprite.__init__(self)
         self.timer = 100 
-        self.velocidad_y = -15
+        self.velocidad_y = -10
         self.speed = 5
         self.image = grenade_img
         self.rect = self.image.get_rect()
@@ -669,6 +675,7 @@ class Grenade(pygame.sprite.Sprite):
         self.timer -= 1
         if self.timer <=0:
             self.kill()
+            grenade_sound.play()
             explosion = Explosion(self.rect.x, self.rect.y, 1.5 )
             explosion_group.add(explosion)
             #Daño de Explosion / #Ranfo de Explosion
@@ -995,6 +1002,7 @@ while Run: #Ciclo de Juego
                 Movimiento_Izquierda = True
             if event.key == pygame.K_UP and player.alive:
                 player.jump = True
+                jump_sound.play()
             if event.key == pygame.K_ESCAPE:
                 Run = False  
             #---- // ---- // ---- // ----- // --- Shoots    
